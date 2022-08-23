@@ -10,6 +10,10 @@ type Error = {
   error?: string
 }
 
+export const config = {
+  runtime: 'experimental-edge'
+}
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data | Error>
