@@ -47,17 +47,26 @@
     in {
       devShells.default = pkgs.mkShell {
         # Extra inputs can be added here
-        nativeBuildInputs = with pkgs; [
-          # Rust
-          rustToolChain
-          sccache
-          openssl
-          pkg-config
-          nodejs
+        nativeBuildInputs = with pkgs; ([
+            # Rust
+            rustToolChain
+            sccache
+            openssl
+            pkg-config
+            nodejs
 
-          # Formatting
-          nodePackages.prettier
-        ];
+            # Formatting
+            nodePackages.prettier
+          ]
+          ++ (
+            if system == flake-utils.lib.system.aarch64-darwin
+            then [
+              darwin.apple_sdk.frameworks.Security
+              darwin.apple_sdk.frameworks.CoreFoundation
+              darwin.apple_sdk.frameworks.CoreServices
+            ]
+            else []
+          ));
 
         # This is hack to avoid the redefinition of CC, CXX and so on to use aarch64.
         # There's probably a better way to do this.
